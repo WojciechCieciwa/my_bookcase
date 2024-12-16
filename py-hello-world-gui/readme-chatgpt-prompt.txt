@@ -1,0 +1,1 @@
+Using Python, please create a class and store it in the file. The class should contain methods that create a simple gui with a button: "Hello World!". Clicking the button would call a method in the class that would pop-up another window, this one with a text saying "Hello World!". Please provide a simple application that uses the class.
