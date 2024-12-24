@@ -1,0 +1,26 @@
+Please create an application in Python. The purpose of this application is to load, view and edit rows of SQLLite format 3 file. The application should use Tkinter for the GUI.
+
+The files:
+1. main.py  
+   - Starts the application (creates `Tk` root).  
+   - Creates the main menu (from `menu_components.py`).  
+   - Creates the main UI (from `gui_components.py`).  
+
+2. menu_components.py  
+   - Defines a class that creates the application’s main menu (Open file, Save file, Save As New file). The class uses methods defined in db_processing.py  
+
+3. db_processing.py  
+   - The file format is SQLLite format 3.
+   - Defines a class handling basic db operations (SQLLite file load, file save, file save as new file).  
+   - Define a class for navigating, editing, viewing the loaded file - to be used by gui_components
+
+4. gui_components.py  
+   - Creates and configures GUI widgets - the widgets use methods defined in db_processing.py:  
+     - A listbox showing the current 10 lines.  
+     - File Home/File End buttons.  
+     - Page up/down buttons.  
+     - Up/Down arrow buttons to move back or forward to the next row.  
+     - Left/Right arrow buttons row review to the left or right.  
+     - Line Home/Line End buttons to move to the beginning of a row or to the end of the row..
+     - Mouse double-click on a line to open a new window with its full content.  
+     - Search text box and Search button to search for a row containing the text from a Search text box.  
