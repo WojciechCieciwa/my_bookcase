@@ -1,27 +1,9 @@
 import requests
 
-## API Open Library
-#url = "https://openlibrary.org/search.json?q=python"#
-#
-# Wysłanie zapytania
-#response = requests.get(url)
-
-# Sprawdzenie, czy zapytanie zakończyło się sukcesem
-#if response.status_code == 200:
-#    data = response.json()#
-#
-#    # Wyświetlenie tytułów książek
-#    for doc in data['docs'][:1]:  # Pierwsze 5 książek
-#        print(f"Tytuł: {doc.get('title')}, Autor: {doc.get('author_name', ['Nieznany autor'])[0]}")
-#        print(f"{doc.get()}")
-#  else:
-#    print("Błąd podczas pobierania danych.")
-#
-
 def get_book_info(isbn):
     # URL do Google Books API
     url = f"https://www.googleapis.com/books/v1/volumes?q=isbn:{isbn}"
-    
+        
     # Wykonaj zapytanie HTTP
     response = requests.get(url)
     
@@ -33,6 +15,7 @@ def get_book_info(isbn):
         if 'items' in data:
             book = data['items'][0]['volumeInfo']
             
+            print(book)
             # Wydobywanie informacji o książce
             title = book.get('title', 'Brak tytułu')
             authors = ', '.join(book.get('authors', ['Brak autorów']))
