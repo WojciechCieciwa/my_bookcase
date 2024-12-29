@@ -14,5 +14,6 @@ def show_message(option):
     messagebox.showinfo(" ",f"{option}")
 
 book_data = isbn_info.get_book_info2("9781556341274")
-book_data_text = "\n".join(book_data.values())
-show_message(book_data["title"])
+#book_data_text = "\n".join(book_data.values())
+book_data_text = "\n".join(book_data["title"])
+show_message(book_data_text)

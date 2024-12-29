@@ -70,7 +70,7 @@ def get_book_info2(isbn):
             # Wyświetlenie informacji o książce
             ISBN_field_list["Okładka"]         = thumbnail
             ISBN_field_list["title"]           = title
-            ISBN_field_list["Autorzy"]         = authors
+            ISBN_field_list["authors"]         = authors
             ISBN_field_list["Wydawca"]         = publisher
             ISBN_field_list["Data publikacji"] = published_date
             ISBN_field_list["Liczba stron"]    = page_count
