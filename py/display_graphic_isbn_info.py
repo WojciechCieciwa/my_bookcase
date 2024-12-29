@@ -14,6 +14,12 @@ def show_message(option):
     messagebox.showinfo(" ",f"{option}")
 
 book_data = isbn_info.get_book_info2("9781556341274")
-#book_data_text = "\n".join(book_data.values())
-book_data_text = "\n".join(book_data["title"])
+book_data_text = ""
+#book_data_text = ("\n"+book_data["title"]+"\n"+book_data["authors"])
+#przygotować:
+# na poczatek pusty string
+# potem w petli
+# book_data_text ma byc suma poszczegolnych pol
+# gdzie są wymienione wszystkie pola (klucze tych pol) nawet jesli pole jest puste
+# na koniec book_data_text jest prezentowane w okienku.
 show_message(book_data_text)
