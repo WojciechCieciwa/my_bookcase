@@ -24,14 +24,16 @@ def bookcase_test_database_structure(database_name):
   print("List of tables\n")
   print(cursor.fetchall())
 
-def bookcase_test_table_structure(database_name, table_name):
+def bookcase_test_table_structure(database_name, tablexx_name):
   sqliteConnection = sqlite3.connect(database_name)
 #  sql_query = """SELECT * FROM INFORMATION_SCHEMA.COLUMNS 
 #    WHERE table_name = 'table_name';"""
-  sql_query = "PRAGMA table_info('table_name');"
+  print(tablexx_name,"\n")
+  sql_query = "PRAGMA table_info(","tablexx_name",");"
   cursor = sqliteConnection.cursor()
   cursor.execute(sql_query)
-  print("Tables",table_name,"structure:\n")
+  print(sql_query)
+  print("Tables",tablexx_name,"structure:\n")
   print(cursor.fetchall())
  #
 
@@ -39,4 +41,4 @@ def bookcase_test_table_structure(database_name, table_name):
 # tymczasowo dla testów
 sqlite3_test_connect('mylibrary.db')
 bookcase_test_database_structure('mylibrary.db')
-bookcase_test_table_structure('mylibrary.db', "AUTHOR")
+bookcase_test_table_structure('mylibrary.db', 'AUTHOR')
