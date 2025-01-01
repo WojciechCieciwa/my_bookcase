@@ -24,18 +24,78 @@ def bookcase_test_database_structure(database_name):
   print("List of tables\n")
   print(cursor.fetchall())
 
-def bookcase_test_table_structure(database_name, tablexx_name):
+def bookcase_test_table_AUTHOR_structure(database_name):
   sqliteConnection = sqlite3.connect(database_name)
-#  sql_query = """SELECT * FROM INFORMATION_SCHEMA.COLUMNS 
-#    WHERE table_name = 'table_name';"""
-  print(tablexx_name,"\n")
-  sql_query = "PRAGMA table_info(",'{tablexx_name}',");"
+  sql_query = "PRAGMA table_info (AUTHOR);"
   cursor = sqliteConnection.cursor()
   cursor.execute(sql_query)
-  print(sql_query)
-  print("Tables",tablexx_name,"structure:\n")
+#  print(sql_query)
+  print("Tables AUTHOR structure:\n")
   print(cursor.fetchall())
- #
+
+def bookcase_test_table_BOOK_structure(database_name):
+  sqliteConnection = sqlite3.connect(database_name)
+  sql_query = "PRAGMA table_info (BOOK);"
+  cursor = sqliteConnection.cursor()
+  cursor.execute(sql_query)
+#  print(sql_query)
+  print("Tables BOOK structure:\n")
+  print(cursor.fetchall())
+
+def bookcase_test_table_COMIC_structure(database_name):
+  sqliteConnection = sqlite3.connect(database_name)
+  sql_query = "PRAGMA table_info (COMIC);"
+  cursor = sqliteConnection.cursor()
+  cursor.execute(sql_query)
+#  print(sql_query)
+  print("Tables COMIC structure:\n")
+  print(cursor.fetchall())
+
+def bookcase_test_table_COMPANY_structure(database_name):
+  sqliteConnection = sqlite3.connect(database_name)
+  sql_query = "PRAGMA table_info (COMPANY);"
+  cursor = sqliteConnection.cursor()
+  cursor.execute(sql_query)
+#  print(sql_query)
+  print("Tables COMPANY structure:\n")
+  print(cursor.fetchall())
+
+def bookcase_test_table_EBOOK_structure(database_name):
+  sqliteConnection = sqlite3.connect(database_name)
+  sql_query = "PRAGMA table_info (EBOOK);"
+  cursor = sqliteConnection.cursor()
+  cursor.execute(sql_query)
+#  print(sql_query)
+  print("Tables EBOOK structure:\n")
+  print(cursor.fetchall())
+
+def bookcase_test_table_MOVIE_structure(database_name):
+  sqliteConnection = sqlite3.connect(database_name)
+  sql_query = "PRAGMA table_info (MOVIE);"
+  cursor = sqliteConnection.cursor()
+  cursor.execute(sql_query)
+#  print(sql_query)
+  print("Tables MOVIE structure:\n")
+  print(cursor.fetchall())
+
+def bookcase_test_table_VIDEO_GAME_structure(database_name):
+  sqliteConnection = sqlite3.connect(database_name)
+  sql_query = "PRAGMA table_info (VIDEO_GAME);"
+  cursor = sqliteConnection.cursor()
+  cursor.execute(sql_query)
+#  print(sql_query)
+  print("Tables VIDEO_GAME structure:\n")
+  print(cursor.fetchall())
+
+#def bookcase_test_table_XXXXX_structure(database_name):
+#  sqliteConnection = sqlite3.connect(database_name)
+#  sql_query = "PRAGMA table_info (XXXXX);"
+#  cursor = sqliteConnection.cursor()
+#  cursor.execute(sql_query)
+##  print(sql_query)
+#  print("Tables XXXXX structure:\n")
+#  print(cursor.fetchall())
+
 
 def bookcase_create_AUTHOR_table(database_name):
   sqliteConnection = sqlite3.connect(database_name)
@@ -171,7 +231,14 @@ def bookcase_create_VIDEO_GAME_table(database_name):
 # tymczasowo dla testów
 sqlite3_test_connect('mylibrary.db')
 bookcase_test_database_structure('mylibrary.db')
-bookcase_test_table_structure('mylibrary.db', {'AUTHOR'})
+bookcase_test_table_AUTHOR_structure('mylibrary.db')
+bookcase_test_table_BOOK_structure('mylibrary.db')
+bookcase_test_table_COMIC_structure('mylibrary.db')
+bookcase_test_table_COMPANY_structure('mylibrary.db')
+bookcase_test_table_EBOOK_structure('mylibrary.db')
+bookcase_test_table_MOVIE_structure('mylibrary.db')
+bookcase_test_table_VIDEO_GAME_structure('mylibrary.db')
+#bookcase_test_table_XXXXX_structure('mylibrary.db')
 #bookcase_create_AUTHOR_table('mylibrary_test.db')
 #bookcase_create_BOOK_table('mylibrary_test.db')
 #bookcase_create_COMIC_table('mylibrary_test.db')
