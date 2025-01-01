@@ -29,7 +29,7 @@ def bookcase_test_table_structure(database_name, tablexx_name):
 #  sql_query = """SELECT * FROM INFORMATION_SCHEMA.COLUMNS 
 #    WHERE table_name = 'table_name';"""
   print(tablexx_name,"\n")
-  sql_query = "PRAGMA table_info(","tablexx_name",");"
+  sql_query = "PRAGMA table_info(",'{tablexx_name}',");"
   cursor = sqliteConnection.cursor()
   cursor.execute(sql_query)
   print(sql_query)
@@ -171,12 +171,12 @@ def bookcase_create_VIDEO_GAME_table(database_name):
 # tymczasowo dla testów
 sqlite3_test_connect('mylibrary.db')
 bookcase_test_database_structure('mylibrary.db')
-#bookcase_test_table_structure('mylibrary.db', 'AUTHOR')
+bookcase_test_table_structure('mylibrary.db', {'AUTHOR'})
 #bookcase_create_AUTHOR_table('mylibrary_test.db')
 #bookcase_create_BOOK_table('mylibrary_test.db')
-bookcase_create_COMIC_table('mylibrary_test.db')
-bookcase_create_COMPANY_table('mylibrary_test.db')
-bookcase_create_EBOOK_table('mylibrary_test.db')
-bookcase_create_MOVIE_table('mylibrary_test.db')
-bookcase_create_VIDEO_GAME_table('mylibrary_test.db')
+#bookcase_create_COMIC_table('mylibrary_test.db')
+#bookcase_create_COMPANY_table('mylibrary_test.db')
+#bookcase_create_EBOOK_table('mylibrary_test.db')
+#bookcase_create_MOVIE_table('mylibrary_test.db')
+#bookcase_create_VIDEO_GAME_table('mylibrary_test.db')
 ##bookcase_create_XXXXX_table('mylibrary_test.db')
