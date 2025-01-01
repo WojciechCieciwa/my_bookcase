@@ -15,10 +15,24 @@ def show_message(option):
 
 book_data = isbn_info.get_book_info2("9781556341274")
 book_data_text = ""
-#book_data_text = ("\n"+book_data["title"]+"\n"+book_data["authors"])
+book_data_text = ("\n"+book_data["title"]+"\n"+book_data["authors"])
 #przygotować:
 # na poczatek pusty string
 # potem w petli
+## for
+#title
+#authors
+#publisher
+#publishedDate
+#description
+#readingModes
+#pageCount
+#printType
+#categories
+#maturityRating
+##
+#a w naszej wersji:
+
 # book_data_text ma byc suma poszczegolnych pol
 # gdzie są wymienione wszystkie pola (klucze tych pol) nawet jesli pole jest puste
 # na koniec book_data_text jest prezentowane w okienku.

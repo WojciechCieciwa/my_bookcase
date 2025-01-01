@@ -84,6 +84,6 @@ def get_book_info2(isbn):
     return ISBN_field_list
 
 # Przykładowe wywołanie funkcji
-#isbn = input("Podaj numer ISBN książki: ")
+isbn = input("Podaj numer ISBN książki: ")
 #print(get_book_info2(isbn))
-#get_book_info(isbn)
+get_book_info(isbn)
