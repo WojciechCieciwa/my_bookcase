@@ -24,6 +24,17 @@ def bookcase_test_database_structure(database_name):
   print("List of tables\n")
   print(cursor.fetchall())
 
+
+def bookcase_test_table_structure(database_name,table_name_for_test):
+  sqliteConnection = sqlite3.connect(database_name)
+  sql_query = "PRAGMA table_info ("+str(table_name_for_test)+");"
+  print(sql_query)
+  cursor = sqliteConnection.cursor()
+  cursor.execute(str(sql_query))
+  print("Tables ",table_name_for_test," structure:\n")
+  print(cursor.fetchall())
+
+
 def bookcase_test_table_AUTHOR_structure(database_name):
   sqliteConnection = sqlite3.connect(database_name)
   sql_query = "PRAGMA table_info (AUTHOR);"
@@ -230,15 +241,20 @@ def bookcase_create_VIDEO_GAME_table(database_name):
 
 # tymczasowo dla testów
 sqlite3_test_connect('mylibrary.db')
-bookcase_test_database_structure('mylibrary.db')
-bookcase_test_table_AUTHOR_structure('mylibrary.db')
-bookcase_test_table_BOOK_structure('mylibrary.db')
-bookcase_test_table_COMIC_structure('mylibrary.db')
-bookcase_test_table_COMPANY_structure('mylibrary.db')
-bookcase_test_table_EBOOK_structure('mylibrary.db')
-bookcase_test_table_MOVIE_structure('mylibrary.db')
-bookcase_test_table_VIDEO_GAME_structure('mylibrary.db')
+#bookcase_test_database_structure('mylibrary.db')
+#bookcase_test_table_AUTHOR_structure('mylibrary.db')
+#bookcase_test_table_BOOK_structure('mylibrary.db')
+#bookcase_test_table_COMIC_structure('mylibrary.db')
+#bookcase_test_table_COMPANY_structure('mylibrary.db')
+#bookcase_test_table_EBOOK_structure('mylibrary.db')
+#bookcase_test_table_MOVIE_structure('mylibrary.db')
+#bookcase_test_table_VIDEO_GAME_structure('mylibrary.db')
 #bookcase_test_table_XXXXX_structure('mylibrary.db')
+bookcase_test_table_structure('mylibrary.db','AUTHOR')
+bookcase_test_table_structure('mylibrary.db','BOOK')
+bookcase_test_table_structure('mylibrary.db','COMIC')
+bookcase_test_table_structure('mylibrary.db','COMPANY')
+bookcase_test_table_structure('mylibrary.db','AUTHOR')
 #bookcase_create_AUTHOR_table('mylibrary_test.db')
 #bookcase_create_BOOK_table('mylibrary_test.db')
 #bookcase_create_COMIC_table('mylibrary_test.db')
