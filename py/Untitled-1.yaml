@@ -1,0 +1,12 @@
+            ISBN_field_list["Okładka"]         = thumbnail
+            ISBN_field_list["Tytuł"]           = title
+            ISBN_field_list["Autorzy"]         = authors
+            ISBN_field_list["Wydawca"]         = publisher
+            ISBN_field_list["Data publikacji"] = published_date
+            ISBN_field_list["Liczba stron"]    = page_count
+            ISBN_field_list["Język"]           = language
+            ISBN_field_list["Opis"]            = des
+9788323503450
+
+9781556341274
+
