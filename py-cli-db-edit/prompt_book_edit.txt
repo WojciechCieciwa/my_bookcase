@@ -1,0 +1,45 @@
+Using Python, please design a class that provides textual interface for a database. We already have a class for database management, defined as follows:
+class DatabaseManager:
+  def __init__(self):
+  def create_database(self, db_name: str):
+  def add_book(self,
+                   title: str,
+                   authors: list,
+                   publisher: str,
+                   release_year: int,
+                   isbn_13: str,
+                   tag_genre: list,
+                   tag_story: list,
+                   description: str,
+                   status: str):
+  def add_series(self, title: str, books: list):
+  def add_update(self, book_id: int, series_id: int, last_updated: str, updated_by: str):
+  def update_book(self,
+                    book_id: int,
+                    title: str = None,
+                    authors: list = None,
+                    publisher: str = None,
+                    release_year: int = None,
+                    isbn_13: str = None,
+                    tag_genre: list = None,
+                    tag_story: list = None,
+                    description: str = None,
+                    status: str = None):
+  def update_series(self, series_id: int, title: str = None, books: list = None):
+  def update_update(self, update_id: int,
+                      book_id: int = None,
+                      series_id: int = None,
+                      last_updated: str = None,
+                      updated_by: str = None):
+  def close(self):
+  def search_books(self, search_term):
+  def update_book(self, book_id, updates, updated_by="script"):
+  def delete_book(self, book_id, updated_by="script"):
+  
+We need a class for text-based interface with the following functionalities:
+- display a text based menu and wait for user prompt
+- menus do display: main menu, search for a book, display books matching the search query, with an ability to browse for a specific book, the results should be paged to ten books, with an ability to go to the next page, , display selected book information with an ability to edit it, update book information, mark selected book as deleted
+- books marked as deleted should not be displayed in search
+- provide a menu to undelete a book - display a list of deleted books, provide a way to undelete a book
+- provide the same functionality for book series
+- display history of book updates

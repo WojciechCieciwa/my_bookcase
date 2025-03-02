@@ -32,4 +32,4 @@ if __name__ == "__main__":
     # updates = db_viewer.get_all_updates()
     # print("Updates:", updates)
 
-    db_viewer.close()
+    # db_viewer.close()

@@ -303,7 +303,12 @@ class DatabaseManager:
         """
         Returns a new connection to the SQLite database.
         """
-        return sqlite3.connect(self.db_path)
+        # return sqlite3.connect(self.db_path)
+        self.create_database("library.db")
+        if not self.connection:
+            raise Exception("Database not created or connected. Call create_database first.")
+        return self.connection
+
 
     def prompt_search_term(self):
         """
