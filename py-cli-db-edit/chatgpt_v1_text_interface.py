@@ -54,7 +54,7 @@ class DatabaseTextInterface:
         if not books:
             print("No books found matching the search term.")
             return
-
+        
         page = 0
         while True:
             start = page * 10
@@ -63,20 +63,20 @@ class DatabaseTextInterface:
             if not page_books:
                 print("No more books to display.")
                 break
-
+            # print(page_books)
             print(f"\n--- Books (Page {page+1}) ---")
-            print(f"{page_books}")
+            # print(f"{page_books}")
             for idx, book in enumerate(page_books, start=1):
                 # Assumes each book dictionary has at least 'id' and 'title'
                 book_idx = str(idx)
                 # book_title = str(book['title'])
                 book_title = book[1]
-                book_written_by = " ".join(book[2])
+                book_authors = book[2]
                 book_date_published = str(book[4])
                 book_entry_status = book[9]
                 # book_id = str(book['id'])
                 # print(f"{book_idx}. {book_title} (ID: {book_id})")
-                print(f"{book_idx}. {book_written_by} \"{book_title}\" {book_date_published}. [{book_entry_status}]")
+                print(f"{book_idx}. {book_authors} \"{book_title}\" {book_date_published}. [{book_entry_status}]")
             print("\nn: next page, p: previous page, s: select a book, b: back to main menu")
             action = input("Your choice: ").strip().lower()
 
@@ -104,12 +104,19 @@ class DatabaseTextInterface:
             else:
                 print("Invalid option. Please try again.")
 
-    def book_details_menu(self, book):
+    def parse_string_to_list(self, string_with_brackets):
+        string_processed = string_with_brackets.strip(" ").strip("[]")
+        string_list = string_processed.split(",")
+        string_list_stripped = [s.strip('" ') for s in string_list]
+        return string_list_stripped
+
+    def book_details_menu(self, book_tuple):
         """
         Displays details for the selected book and provides options to edit or delete.
         """
+        book = list(book_tuple)
         print("\n==== Book Details ====")
-        for key, value in book.items():
+        for key, value in enumerate(book, start=1):
             print(f"{key}: {value}")
         print("\ne: edit, d: mark as deleted, b: back")
         choice = input("Select an option: ").strip().lower()
