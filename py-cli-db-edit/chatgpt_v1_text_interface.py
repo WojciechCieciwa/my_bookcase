@@ -66,17 +66,21 @@ class DatabaseTextInterface:
             # print(page_books)
             print(f"\n--- Books (Page {page+1}) ---")
             # print(f"{page_books}")
-            for idx, book in enumerate(page_books, start=1):
-                # Assumes each book dictionary has at least 'id' and 'title'
-                book_idx = str(idx)
-                # book_title = str(book['title'])
-                book_title = book[1]
-                book_authors = book[2]
-                book_date_published = str(book[4])
-                book_entry_status = book[9]
-                # book_id = str(book['id'])
-                # print(f"{book_idx}. {book_title} (ID: {book_id})")
-                print(f"{book_idx}. {book_authors} \"{book_title}\" {book_date_published}. [{book_entry_status}]")
+            for book in page_books:
+                book_dict = {
+                    "id": book[0],
+                    "title": book[1],
+                    "authors": book[2],
+                    "publisher": book[3],
+                    "release_year": book[4],
+                    "isbn_13": book[5],
+                    "tag_genre": book[6],
+                    "tag_story": book[7],
+                    "description": book[8],
+                    "status": book[9]
+                    }
+                print(f'{book_dict["id"]}. {book_dict["authors"]} ({book_dict["release_year"]}) \"{book_dict["title"]}\". {book_dict["publisher"]}. [{book_dict["status"]}]')
+
             print("\nn: next page, p: previous page, s: select a book, b: back to main menu")
             action = input("Your choice: ").strip().lower()
 
@@ -95,6 +99,10 @@ class DatabaseTextInterface:
                     selection = int(input("Enter the number of the book to select: "))
                     if 1 <= selection <= len(page_books):
                         self.book_details_menu(page_books[selection - 1])
+                        books = self.db.search_books(search_term)
+                        if not books:
+                            print("No books found matching the search term.")
+                            return
                     else:
                         print("Invalid selection number.")
                 except ValueError:
@@ -114,10 +122,21 @@ class DatabaseTextInterface:
         """
         Displays details for the selected book and provides options to edit or delete.
         """
-        book = list(book_tuple)
+        book = {
+            "id": book_tuple[0],
+            "title": book_tuple[1],
+            "authors": book_tuple[2],
+            "publisher": book_tuple[3],
+            "release_year": book_tuple[4],
+            "isbn_13": book_tuple[5],
+            "tag_genre": book_tuple[6],
+            "tag_story": book_tuple[7],
+            "description": book_tuple[8],
+            "status": book_tuple[9]
+        }
         print("\n==== Book Details ====")
-        for key, value in enumerate(book, start=1):
-            print(f"{key}: {value}")
+        for key in book:
+            print(f"{key}: {book[key]}")
         print("\ne: edit, d: mark as deleted, b: back")
         choice = input("Select an option: ").strip().lower()
         if choice == 'e':
@@ -138,32 +157,15 @@ class DatabaseTextInterface:
         print("Leave a field blank to keep its current value.")
         new_title = input(f"Title ({book.get('title', '')}): ") or book.get('title')
         
-        authors_current = ', '.join(book.get('authors', []))
-        new_authors = input(f"Authors (comma separated) ({authors_current}): ")
-        if new_authors:
-            new_authors = [a.strip() for a in new_authors.split(',')]
-        else:
-            new_authors = book.get('authors', [])
+        new_authors = input(f"Title ({book.get('authors', '')}): ") or book.get('authors')
+
         
         new_publisher = input(f"Publisher ({book.get('publisher', '')}): ") or book.get('publisher')
         new_release_year = input(f"Release Year ({book.get('release_year', '')}): ")
         new_release_year = int(new_release_year) if new_release_year else book.get('release_year')
         new_isbn_13 = input(f"ISBN 13 ({book.get('isbn_13', '')}): ") or book.get('isbn_13')
-        
-        tag_genre_current = ', '.join(book.get('tag_genre', []))
-        new_tag_genre = input(f"Genre Tags (comma separated) ({tag_genre_current}): ")
-        if new_tag_genre:
-            new_tag_genre = [t.strip() for t in new_tag_genre.split(',')]
-        else:
-            new_tag_genre = book.get('tag_genre', [])
-        
-        tag_story_current = ', '.join(book.get('tag_story', []))
-        new_tag_story = input(f"Story Tags (comma separated) ({tag_story_current}): ")
-        if new_tag_story:
-            new_tag_story = [t.strip() for t in new_tag_story.split(',')]
-        else:
-            new_tag_story = book.get('tag_story', [])
-        
+        new_tag_genre = input(f"Genre Tags (comma separated) ({book.get('tag_genre', '')}): ") or book.get('tag_genre')
+        new_tag_story = input(f"Story Tags (comma separated) ({book.get('tag_story', '')}): ") or book.get('tag_story')
         new_description = input(f"Description ({book.get('description', '')}): ") or book.get('description')
         new_status = input(f"Status ({book.get('status', '')}): ") or book.get('status')
 

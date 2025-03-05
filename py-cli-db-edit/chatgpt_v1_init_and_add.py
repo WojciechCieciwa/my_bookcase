@@ -340,12 +340,14 @@ class DatabaseManager:
            OR authors LIKE ?
            OR isbn_13 LIKE ?
            OR publisher LIKE ?
+           OR tag_genre LIKE ?
+           OR tag_story LIKE ?
            OR CAST(release_year AS TEXT) LIKE ?
            OR description LIKE ?
         """
 
         like_term = f"%{search_term}%"
-        params = (like_term, like_term, like_term, like_term, like_term, like_term)
+        params = (like_term, like_term, like_term, like_term, like_term, like_term, like_term, like_term)
 
         with self._get_connection() as conn:
             cursor = conn.cursor()
