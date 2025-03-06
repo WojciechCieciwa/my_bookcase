@@ -18,21 +18,21 @@ class DatabaseTextInterface:
         """
         print("\n==== Main Menu ====")
         print("1. Search for a book")
-        print("2. Search for a series")
+        # print("2. Search for a series")
         print("3. Undelete a book")
-        print("4. Undelete a series")
+        # print("4. Undelete a series")
         print("5. Display update history")
         print("6. Exit")
         choice = input("Select an option (1-6): ").strip()
 
         if choice == "1":
             self.search_books_menu()
-        elif choice == "2":
-            self.search_series_menu()
+        # elif choice == "2":
+        #    self.search_series_menu()
         elif choice == "3":
             self.undelete_book_menu()
-        elif choice == "4":
-            self.undelete_series_menu()
+        # elif choice == "4":
+        #     self.undelete_series_menu()
         elif choice == "5":
             self.display_update_history()
         elif choice == "6":
@@ -79,7 +79,7 @@ class DatabaseTextInterface:
                     "description": book[8],
                     "status": book[9]
                     }
-                print(f'{book_dict["id"]}. {book_dict["authors"]} ({book_dict["release_year"]}) \"{book_dict["title"]}\". {book_dict["publisher"]}. [{book_dict["status"]}]')
+                print(f'{book_dict["id"]}. {book_dict["authors"]} ({book_dict["release_year"]}) \"{book_dict["title"]}\". {book_dict["publisher"]}. {book_dict["isbn_13"]}. [{book_dict["status"]}]')
 
             print("\nn: next page, p: previous page, s: select a book, b: back to main menu")
             action = input("Your choice: ").strip().lower()
