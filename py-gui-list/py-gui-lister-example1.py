@@ -45,6 +45,7 @@ app.grid()
 app.grid(row=8,column=4,columnspan=2, sticky=W)
 
 # no to zobaczymy jak bardzo pjetnym debilem jestem ....
+# =================================================================================================================================
 # wiersz 1-szy
 # ISBN
 # ISBN ksiazki
@@ -55,12 +56,26 @@ ISBN13_lbl_def.grid(row=1,column=0,sticky=W)
 ISBN13_lbl_value = Label(text="1234567890123")
 ISBN13_lbl_value.grid(row=1, column=1,sticky=W)
 
+#===================================================================================================================================
 #wiersz 2
 # "Autor: "; autor imie i nazwisko
+author_lbl_text = Label(text="Autor: ")
+author_lbl_text.grid(row=2, column=0, sticky=W)
+
+# tu poprawić, żeby imie i nazwisko było jednym cięgiem ....
+author_imie_val = Label(text="dowolne bzdury, bedzie imie autora")
+author_imie_val.grid(row=2, column=1, sticky=W)
+author_nazwisko_val = Label(text="dowolne bzdury, bedzie nazwisko autora")
+author_nazwisko_val.grid(row=2, column=2, sticky=W)
 
 #wiersz 2A
 # jak jest więcej autorow to kolejny autor,
 
+#tu by trzeba ustawić zliczanie wierszy....
+#jeśli jest więcej niż jeden autor ....
+
+# jesli nie to to:
+#========================================================================================================================================
 #wiersz 3
 # "tytuł: "; pelny tytul pozycji
 title_lbl_text = Label(text="Tytuł: ")
@@ -68,6 +83,7 @@ title_lbl_text.grid(row=3, column=0, sticky=W)
 title_lbl_val = Label(text="teraz jest wpis z palca, potem bedzie to co jest w bazie")
 title_lbl_val.grid(row=3, column=1, sticky=W)
 
+#==========================================================================================================================================
 #wiersz 4
 #"Wydawca "; nazwa wydawcy; "Rok wydania: "; rok_wydania
 publisher_lbl_text = Label(text="Publisher: ")
@@ -80,5 +96,23 @@ publish_date_lbl_def = Label(text="Data wydania: ")
 publish_date_lbl_def.grid(row=4, column=2,sticky=W)
 publish_date_lbl_t2 = Label(text="2025, ale docelowoo bedzie data wydania")
 publish_date_lbl_t2.grid(row=4, column=3,sticky=W)
+
+#==========================================================================================================================================
+# wiersz 5
+#ilość stron 
+il_stron_lbl_text = Label(text="Pages: ")
+il_stron_lbl_text.grid(row=5, column=0,sticky=W)
+il_stron_lbl_val = Label(text="tu ilość stron np. 235, potem będzie zapełnione faktyczną wartością")
+il_stron_lbl_val.grid(row=5,column=1,sticky=W)
+
+#które wydanie (?)
+nr_wydania_lbl_text = Label(text=" Wydanie: ")
+nr_wydania_lbl_text.grid(row=5,column=2,sticky=W)
+nr_wydania_lbl_val = Label(text=("tu numer wydania jesli nie będzie to puste"))
+nr_wydania_lbl_val.grid(row=5,column=3,sticky=W)
+#=========================================================================================================================================
+#jaka seria (o ile)
+
+#krótki opis
 
 root.mainloop()
