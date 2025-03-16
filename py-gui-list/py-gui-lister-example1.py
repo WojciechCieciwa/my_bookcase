@@ -26,8 +26,15 @@ bttnl = Button(app, text = "kolejny glupi tekst na nic nie robiącym przycisku."
 # aktywujemy BTTNL
 bttnl.grid()
 
+# drugi przycisk - pusty
+bttn2 = Button(app)
+
+#modyfikujemy przycisk 2
+bttn2.configure(text="skleroza nie boli tylko trzeba sie nachodzić, albo napisc ...")
+bttn2.grid()
 
 
-
+bttn3 = Button(app,text="trzeci guzik")
+bttn3.grid()
 
 root.mainloop()
