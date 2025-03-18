@@ -115,4 +115,8 @@ nr_wydania_lbl_val.grid(row=5,column=3,sticky=W)
 
 #krótki opis
 
+# no dobra patrząc na to p czym rozmawialiśmy wczoraj tj. w poniedziałęk,
+# Tu powinienem zebrać w całości to co wiem o książce i zroić z tego duuuuży string..
+
+
 root.mainloop()
