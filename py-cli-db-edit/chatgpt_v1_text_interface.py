@@ -1,3 +1,5 @@
+import json
+
 class DatabaseTextInterface:
     def __init__(self, db_manager):
         """
@@ -70,16 +72,16 @@ class DatabaseTextInterface:
                 book_dict = {
                     "id": book[0],
                     "title": book[1],
-                    "authors": book[2],
+                    "authors": json.loads(book[2]) if book[2] else [],
                     "publisher": book[3],
                     "release_year": book[4],
                     "isbn_13": book[5],
-                    "tag_genre": book[6],
-                    "tag_story": book[7],
+                    "pages": book[6],
+                    "tags": json.loads(book[7]) if book[7] else [],
                     "description": book[8],
                     "status": book[9]
                     }
-                print(f'{book_dict["id"]}. {book_dict["authors"]} ({book_dict["release_year"]}) \"{book_dict["title"]}\". {book_dict["publisher"]}. {book_dict["isbn_13"]}. [{book_dict["status"]}]')
+                print(self.display_book_briefly(book_dict))
 
             print("\nn: next page, p: previous page, s: select a book, b: back to main menu")
             action = input("Your choice: ").strip().lower()
@@ -112,6 +114,13 @@ class DatabaseTextInterface:
             else:
                 print("Invalid option. Please try again.")
 
+    def display_book_briefly(self, book_dict):
+        """
+        print(f'{book_dict["id"]}. {book_dict["authors"]} ({book_dict["release_year"]}) \"{book_dict["title"]}\". {book_dict["publisher"]}. {book_dict["isbn_13"]}. [{book_dict["status"]}]')
+        """
+        return (f'{book_dict["id"]}. {", ".join(book_dict["authors"])}. \"{book_dict["title"]}\". {book_dict["publisher"]}. {book_dict["isbn_13"]}. {book_dict["release_year"]}. [{book_dict["status"]}].')
+
+
     def parse_string_to_list(self, string_with_brackets):
         string_processed = string_with_brackets.strip(" ").strip("[]")
         string_list = string_processed.split(",")
@@ -125,18 +134,21 @@ class DatabaseTextInterface:
         book = {
             "id": book_tuple[0],
             "title": book_tuple[1],
-            "authors": book_tuple[2],
+            "authors": json.loads(book_tuple[2]) if book_tuple[2] else [],
             "publisher": book_tuple[3],
             "release_year": book_tuple[4],
             "isbn_13": book_tuple[5],
-            "tag_genre": book_tuple[6],
-            "tag_story": book_tuple[7],
+            "pages": book_tuple[6],
+            "tags": json.loads(book_tuple[7]) if book_tuple[7] else [],
             "description": book_tuple[8],
             "status": book_tuple[9]
         }
         print("\n==== Book Details ====")
         for key in book:
-            print(f"{key}: {book[key]}")
+            if (isinstance(book[key], dict)) or (isinstance(book[key], list)):
+                print(f"{key}: {', '.join(book[key])}")
+            else:
+                print(f"{key}: {book[key]}")
         print("\ne: edit, d: mark as deleted, b: back")
         choice = input("Select an option: ").strip().lower()
         if choice == 'e':

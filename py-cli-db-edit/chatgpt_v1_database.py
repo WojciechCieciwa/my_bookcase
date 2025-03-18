@@ -28,10 +28,10 @@ class DatabaseManager:
                 title TEXT NOT NULL,
                 authors TEXT,
                 publisher TEXT,
-                release_year INTEGER,
-                isbn_13 TEXT,
-                tag_genre TEXT,
-                tag_story TEXT,
+                release_year TEXT,
+                isbn_13 TEXT NOT NULL,
+                pages TEXT,
+                tags TEXT,
                 description TEXT,
                 status TEXT
             )
@@ -42,7 +42,9 @@ class DatabaseManager:
             CREATE TABLE IF NOT EXISTS series (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 title TEXT NOT NULL,
-                books TEXT
+                books_ids TEXT,
+                tags TEXT,
+                description TEXT
             )
         """)
 
@@ -65,10 +67,10 @@ class DatabaseManager:
                  title: str,
                  authors: list,
                  publisher: str,
-                 release_year: int,
+                 release_year: str,
                  isbn_13: str,
-                 tag_genre: list,
-                 tag_story: list,
+                 pages: str,
+                 tags: list,
                  description: str,
                  status: str):
         """
@@ -79,8 +81,8 @@ class DatabaseManager:
         :param publisher: Publisher name
         :param release_year: Release year (integer)
         :param isbn_13: ISBN-13 identifier
-        :param tag_genre: List of genre tags
-        :param tag_story: List of story tags
+        :param pages: Number of pages
+        :param tags: List of tags
         :param description: Description or summary of the book
         :param status: One of ['deleted','incomplete','complete','update_requested']
         """
@@ -88,8 +90,7 @@ class DatabaseManager:
             raise Exception("Database not created or connected. Call create_database first.")
 
         authors_json = json.dumps(authors)
-        tag_genre_json = json.dumps(tag_genre)
-        tag_story_json = json.dumps(tag_story)
+        tags_json = json.dumps(tags)
 
         # dodajemy blokade duplikatu ISBN
 
@@ -100,14 +101,14 @@ class DatabaseManager:
             return False
 
         self.cursor.execute("""
-            INSERT INTO books (title, authors, publisher, release_year, isbn_13, tag_genre, tag_story, description, status)
+            INSERT INTO books (title, authors, publisher, release_year, isbn_13, pages, tags, description, status)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (title, authors_json, publisher, release_year, isbn_13, tag_genre_json, tag_story_json, description, status))
+            """, (title, authors_json, publisher, release_year, isbn_13, pages, tags_json, description, status))
 
         self.connection.commit()
         return True
 
-    def add_series(self, title: str, books: list):
+    def add_series(self, title: str, books_ids: list = [], tags: list = [], description: str = None):
         """
         Add a new series to the database.
         
@@ -117,11 +118,13 @@ class DatabaseManager:
         if not self.connection:
             raise Exception("Database not created or connected. Call create_database first.")
 
-        books_json = json.dumps(books)
+        books_json = json.dumps(books_ids)
+        tags_json = json.dumps(tags)
+
         self.cursor.execute("""
-            INSERT INTO series (title, books)
-            VALUES (?, ?)
-        """, (title, books_json))
+            INSERT INTO series (title, books_ids, tags, description)
+            VALUES (?, ?, ?, ?)
+        """, (title, books_json, tags_json, description))
 
         self.connection.commit()
 
@@ -151,8 +154,8 @@ class DatabaseManager:
                     publisher: str = None,
                     release_year: int = None,
                     isbn_13: str = None,
-                    tag_genre: list = None,
-                    tag_story: list = None,
+                    pages: str = None,
+                    tags: list = None,
                     description: str = None,
                     status: str = None):
         """
@@ -197,13 +200,13 @@ class DatabaseManager:
             updates.append("isbn_13 = ?")
             params.append(isbn_13)
 
-        if tag_genre is not None:
-            updates.append("tag_genre = ?")
-            params.append(json.dumps(tag_genre))
+        if tags is not None:
+            updates.append("tags = ?")
+            params.append(json.dumps(tags))
 
-        if tag_story is not None:
-            updates.append("tag_story = ?")
-            params.append(json.dumps(tag_story))
+        if pages is not None:
+            updates.append("pages = ?")
+            params.append(str(pages))
 
         if description is not None:
             updates.append("description = ?")
@@ -220,7 +223,12 @@ class DatabaseManager:
             self.cursor.execute(query, params)
             self.connection.commit()
 
-    def update_series(self, series_id: int, title: str = None, books: list = None):
+    def update_series(self, 
+        series_id: int, 
+        title: str = None, 
+        books_ids: list = None, 
+        tags: list = None, 
+        description: str = None):
         """
         Update fields for an existing series by its ID.
         Only non-None parameters will be updated.
@@ -239,9 +247,17 @@ class DatabaseManager:
             updates.append("title = ?")
             params.append(title)
 
-        if books is not None:
-            updates.append("books = ?")
-            params.append(json.dumps(books))
+        if books_ids is not None:
+            updates.append("books_ids = ?")
+            params.append(json.dumps(books_ids))
+
+        if tags is not None:
+            updates.append("tags = ?")
+            params.append(json.dumps(tags))
+
+        if description is not None:
+            updates.append("description = ?")
+            params.append(description)
 
         if updates:
             query = "UPDATE series SET " + ", ".join(updates) + " WHERE id = ?"
@@ -331,8 +347,8 @@ class DatabaseManager:
             publisher,
             release_year,
             isbn_13,
-            tag_genre,
-            tag_story,
+            pages,
+            tags,
             description,
             status
         FROM books
@@ -340,14 +356,13 @@ class DatabaseManager:
            OR authors LIKE ?
            OR isbn_13 LIKE ?
            OR publisher LIKE ?
-           OR tag_genre LIKE ?
-           OR tag_story LIKE ?
-           OR CAST(release_year AS TEXT) LIKE ?
+           OR tags LIKE ?
+           OR release_year LIKE ?
            OR description LIKE ?
         """
 
         like_term = f"%{search_term}%"
-        params = (like_term, like_term, like_term, like_term, like_term, like_term, like_term, like_term)
+        params = (like_term, like_term, like_term, like_term, like_term, like_term, like_term)
 
         with self._get_connection() as conn:
             cursor = conn.cursor()
