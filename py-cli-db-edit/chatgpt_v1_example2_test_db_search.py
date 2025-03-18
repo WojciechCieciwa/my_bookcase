@@ -1,13 +1,12 @@
 import sqlite3
 import json
 from datetime import datetime
-import chatgpt_v1_init_and_add
-import chatgpt_v1_viewer
+import chatgpt_v1_database
 
 if __name__ == "__main__":
 
     # Create/initialize the database (and possibly add data)
-    db_manager = chatgpt_v1_init_and_add.DatabaseManager()
+    db_manager = chatgpt_v1_database.DatabaseManager()
     db_manager.create_database("library.db")
 
     search_term = db_manager.prompt_search_term()

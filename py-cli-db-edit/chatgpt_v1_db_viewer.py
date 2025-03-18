@@ -16,7 +16,7 @@ class DatabaseViewer:
         Returns a list of dictionaries, each dictionary containing the book data.
         JSON fields (authors, tag_genre, tag_story) are converted back into Python lists.
         """
-        query = "SELECT id, title, authors, publisher, release_year, isbn_13, tag_genre, tag_story, description, status FROM books"
+        query = "SELECT id, title, authors, publisher, release_year, isbn_13, pages, tags, description, status FROM books"
         rows = self.cursor.execute(query).fetchall()
 
         books = []
@@ -30,10 +30,10 @@ class DatabaseViewer:
                 'publisher': row[3],
                 'release_year': row[4],
                 'isbn_13': row[5],
-                'tag_genre': json.loads(row[6]) if row[6] else [],
-                'tag_story': json.loads(row[7]) if row[7] else [],
-                'description': row[8],
-                'status': row[9],
+                'pages': row[6],
+                'tags': json.loads(row[7]) if row[7] else [],
+                'description': row[7],
+                'status': row[8],
             }
             books.append(book)
 
@@ -45,7 +45,7 @@ class DatabaseViewer:
         Returns a list of dictionaries, each dictionary containing the series data.
         JSON fields (books) are converted back into Python lists.
         """
-        query = "SELECT id, title, books FROM series"
+        query = "SELECT id, title, books_ids, tags, description FROM series"
         rows = self.cursor.execute(query).fetchall()
 
         all_series = []
@@ -54,7 +54,9 @@ class DatabaseViewer:
             series = {
                 'id': row[0],
                 'title': row[1],
-                'books': json.loads(row[2]) if row[2] else []
+                'books_ids': json.loads(row[2]) if row[2] else [],
+                'tags': json.loads(row[3]) if row[3] else [],
+                'description': row[4]
             }
             all_series.append(series)
 
