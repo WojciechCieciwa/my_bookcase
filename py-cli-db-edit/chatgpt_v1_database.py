@@ -25,8 +25,11 @@ class DatabaseManager:
         self.cursor.execute("""
             CREATE TABLE IF NOT EXISTS books (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                title TEXT NOT NULL,
                 authors TEXT,
+                title TEXT NOT NULL,
+                edition TEXT,
+                language TEXT,
+                location TEXT,
                 publisher TEXT,
                 release_year TEXT,
                 isbn_13 TEXT NOT NULL,
@@ -64,20 +67,26 @@ class DatabaseManager:
         self.connection.commit()
 
     def add_book(self,
-                 title: str,
-                 authors: list,
-                 publisher: str,
-                 release_year: str,
-                 isbn_13: str,
-                 pages: str,
-                 tags: list,
-                 description: str,
-                 status: str):
+                authors: list,
+                title: str,
+                edition: str,
+                language: str,
+                location: str,
+                publisher: str,
+                release_year: str,
+                isbn_13: str,
+                pages: str,
+                tags: list,
+                description: str,
+                status: str):
         """
         Add a new book to the database.
         
-        :param title: Title of the book
         :param authors: List of authors
+        :param title: Title of the book
+        :param edition: Edition of the book
+        :param language: Language of the book
+        :param location: Location of the release
         :param publisher: Publisher name
         :param release_year: Release year (integer)
         :param isbn_13: ISBN-13 identifier
@@ -93,7 +102,6 @@ class DatabaseManager:
         tags_json = json.dumps(tags)
 
         # dodajemy blokade duplikatu ISBN
-
         query = "SELECT isbn_13 FROM books WHERE isbn_13 = '" + str(isbn_13) + "'"
         self.cursor.execute(query)
         rows = self.cursor.execute(query).fetchall()
@@ -101,9 +109,9 @@ class DatabaseManager:
             return False
 
         self.cursor.execute("""
-            INSERT INTO books (title, authors, publisher, release_year, isbn_13, pages, tags, description, status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (title, authors_json, publisher, release_year, isbn_13, pages, tags_json, description, status))
+            INSERT INTO books (authors,      title, edition, language, location, publisher, release_year, isbn_13, pages, tags,     description, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,              (authors_json, title, edition, language, location, publisher, release_year, isbn_13, pages, tags_json, description, status))
 
         self.connection.commit()
         return True
@@ -146,82 +154,6 @@ class DatabaseManager:
         """, (book_id, series_id, last_updated, updated_by))
 
         self.connection.commit()
-
-    def update_book(self,
-                    book_id: int,
-                    title: str = None,
-                    authors: list = None,
-                    publisher: str = None,
-                    release_year: int = None,
-                    isbn_13: str = None,
-                    pages: str = None,
-                    tags: list = None,
-                    description: str = None,
-                    status: str = None):
-        """
-        Update fields for an existing book by its ID.
-        Only non-None parameters will be updated.
-        
-        :param book_id: The ID of the book to update
-        :param title: New title (optional)
-        :param authors: New list of authors (optional)
-        :param publisher: New publisher name (optional)
-        :param release_year: New release year (optional)
-        :param isbn_13: New ISBN-13 (optional)
-        :param tag_genre: New list of genre tags (optional)
-        :param tag_story: New list of story tags (optional)
-        :param description: New description (optional)
-        :param status: New status (optional)
-        """
-        if not self.connection:
-            raise Exception("Database not created or connected. Call create_database first.")
-
-        # Gather the fields to update
-        updates = []
-        params = []
-
-        if title is not None:
-            updates.append("title = ?")
-            params.append(title)
-
-        if authors is not None:
-            updates.append("authors = ?")
-            params.append(json.dumps(authors))
-
-        if publisher is not None:
-            updates.append("publisher = ?")
-            params.append(publisher)
-
-        if release_year is not None:
-            updates.append("release_year = ?")
-            params.append(release_year)
-
-        if isbn_13 is not None:
-            updates.append("isbn_13 = ?")
-            params.append(isbn_13)
-
-        if tags is not None:
-            updates.append("tags = ?")
-            params.append(json.dumps(tags))
-
-        if pages is not None:
-            updates.append("pages = ?")
-            params.append(str(pages))
-
-        if description is not None:
-            updates.append("description = ?")
-            params.append(description)
-
-        if status is not None:
-            updates.append("status = ?")
-            params.append(status)
-
-        # Construct the SQL update query dynamically
-        if updates:
-            query = "UPDATE books SET " + ", ".join(updates) + " WHERE id = ?"
-            params.append(book_id)
-            self.cursor.execute(query, params)
-            self.connection.commit()
 
     def update_series(self, 
         series_id: int, 
@@ -341,21 +273,12 @@ class DatabaseManager:
         """
         query = """
         SELECT
-            id,
-            title,
-            authors,
-            publisher,
-            release_year,
-            isbn_13,
-            pages,
-            tags,
-            description,
-            status
+            *
         FROM books
-        WHERE title LIKE ?
-           OR authors LIKE ?
-           OR isbn_13 LIKE ?
+        WHERE authors LIKE ?
+           OR title LIKE ?
            OR publisher LIKE ?
+           OR isbn_13 LIKE ?
            OR tags LIKE ?
            OR release_year LIKE ?
            OR description LIKE ?
@@ -512,6 +435,15 @@ class DatabaseManager:
             # For this example, we'll pass series_id as None (or 0 if you prefer).
             cursor.execute(updates_insert_query, (book_id, None, now_str, updated_by))
             conn.commit()
+
+        if updates:
+            # print (f"updates: {updates}")
+            updates_summary = ", ".join([item.strip(" =?") for item in updates if isinstance(item, str)])
+            # print (f"updates_summary: {updates_summary}")
+
+            return updates_summary
+        return None
+
 
     def delete_book(self, book_id, updated_by="script"):
         """

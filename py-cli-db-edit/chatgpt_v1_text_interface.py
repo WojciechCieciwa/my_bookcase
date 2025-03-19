@@ -68,20 +68,23 @@ class DatabaseTextInterface:
             # print(page_books)
             print(f"\n--- Books (Page {page+1}) ---")
             # print(f"{page_books}")
-            for book in page_books:
+            for i, book in enumerate(page_books):
                 book_dict = {
                     "id": book[0],
-                    "title": book[1],
-                    "authors": json.loads(book[2]) if book[2] else [],
-                    "publisher": book[3],
-                    "release_year": book[4],
-                    "isbn_13": book[5],
-                    "pages": book[6],
-                    "tags": json.loads(book[7]) if book[7] else [],
-                    "description": book[8],
-                    "status": book[9]
+                    "authors": json.loads(book[1]) if book[1] else [],
+                    "title": book[2],
+                    "edition": book[3],
+                    "language": book[4],
+                    "location": book[5],
+                    "publisher": book[6],
+                    "release_year": book[7],
+                    "isbn_13": book[8],
+                    "pages": book[9],
+                    "tags": json.loads(book[10]) if book[10] else [],
+                    "description": book[11],
+                    "status": book[12]
                     }
-                print(self.display_book_briefly(book_dict))
+                print(f"{i+1}. {self.display_book_briefly(book_dict)}")
 
             print("\nn: next page, p: previous page, s: select a book, b: back to main menu")
             action = input("Your choice: ").strip().lower()
@@ -118,7 +121,7 @@ class DatabaseTextInterface:
         """
         print(f'{book_dict["id"]}. {book_dict["authors"]} ({book_dict["release_year"]}) \"{book_dict["title"]}\". {book_dict["publisher"]}. {book_dict["isbn_13"]}. [{book_dict["status"]}]')
         """
-        return (f'{book_dict["id"]}. {", ".join(book_dict["authors"])}. \"{book_dict["title"]}\". {book_dict["publisher"]}. {book_dict["isbn_13"]}. {book_dict["release_year"]}. [{book_dict["status"]}].')
+        return (f'{", ".join(book_dict["authors"])}. \"{book_dict["title"]}\". {book_dict["publisher"]}. {book_dict["isbn_13"]}. {book_dict["release_year"]}. [{book_dict["status"]}].')
 
 
     def parse_string_to_list(self, string_with_brackets):
@@ -127,34 +130,37 @@ class DatabaseTextInterface:
         string_list_stripped = [s.strip('" ') for s in string_list]
         return string_list_stripped
 
-    def book_details_menu(self, book_tuple):
+    def book_details_menu(self, book):
         """
         Displays details for the selected book and provides options to edit or delete.
         """
-        book = {
-            "id": book_tuple[0],
-            "title": book_tuple[1],
-            "authors": json.loads(book_tuple[2]) if book_tuple[2] else [],
-            "publisher": book_tuple[3],
-            "release_year": book_tuple[4],
-            "isbn_13": book_tuple[5],
-            "pages": book_tuple[6],
-            "tags": json.loads(book_tuple[7]) if book_tuple[7] else [],
-            "description": book_tuple[8],
-            "status": book_tuple[9]
+        book_dict = {
+            "id": book[0],
+            "authors": ", ".join(json.loads(book[1]) if book[1] else []),
+            "title": book[2],
+            "edition": book[3],
+            "language": book[4],
+            "location": book[5],
+            "publisher": book[6],
+            "release_year": book[7],
+            "isbn_13": book[8],
+            "pages": book[9],
+            "tags": ", ".join(json.loads(book[10]) if book[10] else []),
+            "description": book[11],
+            "status": book[12]
         }
         print("\n==== Book Details ====")
-        for key in book:
-            if (isinstance(book[key], dict)) or (isinstance(book[key], list)):
-                print(f"{key}: {', '.join(book[key])}")
+        for key in book_dict:
+            if (isinstance(book_dict[key], dict)) or (isinstance(book_dict[key], list)):
+                print(f"{key}: {', '.join(book_dict[key])}")
             else:
-                print(f"{key}: {book[key]}")
+                print(f"{key}: {book_dict[key]}")
         print("\ne: edit, d: mark as deleted, b: back")
         choice = input("Select an option: ").strip().lower()
         if choice == 'e':
-            self.edit_book_menu(book)
+            self.edit_book_menu(book_dict)
         elif choice == 'd':
-            self.delete_book(book)
+            self.delete_book(book_dict)
         elif choice == 'b':
             return
         else:
@@ -167,41 +173,82 @@ class DatabaseTextInterface:
         """
         print("\n==== Edit Book ====")
         print("Leave a field blank to keep its current value.")
-        new_title = input(f"Title ({book.get('title', '')}): ") or book.get('title')
-        
-        new_authors = input(f"Title ({book.get('authors', '')}): ") or book.get('authors')
 
-        
-        new_publisher = input(f"Publisher ({book.get('publisher', '')}): ") or book.get('publisher')
-        new_release_year = input(f"Release Year ({book.get('release_year', '')}): ")
-        new_release_year = int(new_release_year) if new_release_year else book.get('release_year')
-        new_isbn_13 = input(f"ISBN 13 ({book.get('isbn_13', '')}): ") or book.get('isbn_13')
-        new_tag_genre = input(f"Genre Tags (comma separated) ({book.get('tag_genre', '')}): ") or book.get('tag_genre')
-        new_tag_story = input(f"Story Tags (comma separated) ({book.get('tag_story', '')}): ") or book.get('tag_story')
-        new_description = input(f"Description ({book.get('description', '')}): ") or book.get('description')
-        new_status = input(f"Status ({book.get('status', '')}): ") or book.get('status')
-
-        updates = {
-            "title": new_title,
-            "authors": new_authors,
-            "publisher": new_publisher,
-            "release_year": new_release_year,
-            "isbn_13": new_isbn_13,
-            "tag_genre": new_tag_genre,
-            "tag_story": new_tag_story,
-            "description": new_description,
-            "status": new_status,
+        updates_fields = {
+            "authors": "Authors (comma separated)",
+            "title": "Title",
+            "edition": "Edition",
+            "language": "Language",
+            "location": "Location",
+            "publisher": "Publisher",
+            "release_year": "Release Year",
+            "isbn_13": "ISBN 13",
+            "pages": "Number of pages",
+            "tags": "Tags (comma separated)",
+            "description": "Description",
+            "status": "Status",
         }
-        self.db.update_book(book['id'], updates, updated_by="user")
-        print("Book updated.")
 
-    def delete_book(self, book):
+        updates = {}
+        for field_name in updates_fields.keys():
+            new_field_value = input(f"{updates_fields[field_name]} ({book.get(field_name, '')}): ") or book.get(field_name)
+            if new_field_value != book.get(field_name, ''):
+                if field_name in ['authors', 'tags']:
+                    updates[field_name] = self.list_to_string(new_field_value)
+                else:
+                    updates[field_name] = new_field_value
+
+        # new_authors = input(f"Authors (comma separated) ({book.get('authors', '')}): ") or book.get('authors')
+        # new_title = input(f"Title ({book.get('title', '')}): ") or book.get('title')
+        # new_edition = input(f"Edition ({book.get('edition', '')}): ") or book.get('edition')
+        # new_language = input(f"Language ({book.get('language', '')}): ") or book.get('language')
+        # new_location = input(f"Location ({book.get('location', '')}): ") or book.get('location')
+        # new_publisher = input(f"Publisher ({book.get('publisher', '')}): ") or book.get('publisher')
+        # new_release_year = input(f"Release Year ({book.get('release_year', '')}): ") or book.get('release_year')
+        # new_isbn_13 = input(f"ISBN 13 ({book.get('isbn_13', '')}): ") or book.get('isbn_13')
+        # new_pages = input(f"Number of pages ({book.get('pages', '')}): ") or book.get('pages')
+        # new_tags = input(f"Tags (comma separated) ({book.get('tags', '')}): ") or book.get('tags')
+        # new_description = input(f"Description ({book.get('description', '')}): ") or book.get('description')
+        # new_status = input(f"Status ({book.get('status', '')}): ") or book.get('status')
+
+        # updates = {
+        #     "authors": self.list_to_string(new_authors),
+        #     "title": new_title,
+        #     "edition": new_edition,
+        #     "language": new_language,
+        #     "location": new_location,
+        #     "publisher": new_publisher,
+        #     "release_year": new_release_year,
+        #     "isbn_13": new_isbn_13,
+        #     "pages": str(new_pages),
+        #     "tags": self.list_to_string(new_tags),
+        #     "description": new_description,
+        #     "status": new_status,
+        # }
+        # print (f"edit_book_menu: updates: {updates}")
+        updates_summary = self.db.update_book(book['id'], updates, updated_by="user")
+        if updates_summary:
+            print(f"Book updated: {updates_summary}")
+        else:
+            print(f"No changes, book not updated.")
+
+    def list_to_string(self, comma_delimited_string):
+        # print(comma_string)
+        items_list = comma_delimited_string.split(",")
+        # items_list = comma_string
+        if not isinstance(items_list, list) or not items_list:
+            return json.dumps({})
+        cleaned_list = [item.strip() for item in items_list if isinstance(item, str)]
+        return json.dumps(cleaned_list)    
+
+
+    def delete_book(self, book_dict):
         """
         Marks a book as deleted (for example by updating its status).
         """
-        confirmation = input(f"Are you sure you want to mark '{book['title']}' as deleted? (y/n): ").strip().lower()
+        confirmation = input(f"Are you sure you want to mark '{book_dict['title']}' as deleted? (y/n): ").strip().lower()
         if confirmation == 'y':
-            self.db.delete_book(book['id'], updated_by="user")
+            self.db.delete_book(book_dict['id'], updated_by="user")
             print("Book marked as deleted.")
         else:
             print("Operation canceled.")

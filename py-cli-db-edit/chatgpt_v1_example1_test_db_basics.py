@@ -12,8 +12,11 @@ if __name__ == "__main__":
 
     # (Optional) Add sample data
     db_manager.add_book(
+        authors=["Alice Anderson", "Bob the Builder"],
         title="Sample Book",
-        authors=["Alice", "Bob"],
+        edition="2",
+        language="EN",
+        location="Prague",
         publisher="Sample Publisher",
         release_year="2022",
         isbn_13="1234567890123",
@@ -24,11 +27,14 @@ if __name__ == "__main__":
     )
 
     db_manager.add_book(
-        title="Sample Book 2",
         authors=["Jonathan Doe", "Alicia Pardner"],
+        title="Sample Book 2",
+        edition="6",
+        language="EN",
+        location="Warsaw",
         publisher="Sample Publisher",
         release_year="2022",
-        isbn_13="1234567890123",
+        isbn_13="1236567890123",
         pages="113",
         tags=["Sci-Fi", "Novella", "Very, Very Bad", "Suspense"],
         description="A sample mystery book.",
@@ -36,8 +42,11 @@ if __name__ == "__main__":
     )
 
     db_manager.add_book(
-        title="Sample Book 3",
         authors=["Felix Doe"],
+        title="Sample Book 3",
+        edition="4",
+        language="EN",
+        location="New York",
         publisher="Sample Publisher",
         release_year="2023",
         isbn_13="1234567190123",
