@@ -121,6 +121,6 @@ nr_wydania_lbl_val.grid(row=5,column=3,sticky=W)
 # a tu powinien być przycisk wyjscia
 bttn_exit = Button(app, text = "Koniec")
 # aktywujemy BTTNL
-bttn_exit.grid(row=8,column=2,sticky=W)
+bttn_exit.grid(row=7,column=2,sticky=W)
 
 root.mainloop()
